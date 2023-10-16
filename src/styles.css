@@ -1,0 +1,19 @@
+
+h1{
+  display: inline;
+  color: #0dcaf0;
+}
+
+
+h6{
+  display: inline;
+  color: white;
+}
+
+body{
+  background-color:gray;
+}
+.quick-icon-size{
+  height: 60px;
+  width: 60px;
+}
