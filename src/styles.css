@@ -1,4 +1,9 @@
 
+*{
+  margin: 0px;
+  padding: 0px;
+}
+
 h1{
   display: inline;
   color: #0dcaf0;
@@ -16,4 +21,14 @@ body{
 .quick-icon-size{
   height: 60px;
   width: 60px;
+}
+
+
+/*back button style*/
+
+
+.back-button{
+  border:"0";
+  padding:"0";
+  background-color:"inherit",
 }
