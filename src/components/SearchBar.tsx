@@ -6,39 +6,40 @@ export function SearchBar() {
 
   const arrowButtonStyle=
     {
-      border:"0",
-      padding:"0",
-      backgroundColor:"inherit",
-      margin:"0 30px 0 30px"
+    border:"0",
+    padding:"0",
+    backgroundColor:"inherit",
+    margin:"0 30px 0 30px"
     }
     
   
 
   return (
     <nav
-      className="navbar bg-body-tertiary navbar  "
+      className="navbar bg-body-tertiary "
       data-bs-theme="dark"
       
     >
       <div className="container-fluid">
-       <div>
-       <button
-          style={arrowButtonStyle}
-          onClick={() => {
-            navigate(-1);
-          }}
-        >
-        <FaArrowLeft />
-        </button>
-        <button
-          style={arrowButtonStyle}
-          onClick={() => {
-            navigate(1);
-          }}
-        >
-        <FaArrowRight />
-        </button>
-       </div>
+        <div>
+          <button
+            style={arrowButtonStyle}
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            <FaArrowLeft />
+          </button>
+          <button
+            style={arrowButtonStyle}
+            onClick={() => {
+              navigate(1);
+            }}
+          >
+            <FaArrowRight />
+          </button>
+        </div>
+
         <a className="navbar-brand text-white ">
           <h2>
             Turbo<h1>X</h1>plorer

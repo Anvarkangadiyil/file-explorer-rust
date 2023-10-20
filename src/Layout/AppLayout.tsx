@@ -9,6 +9,9 @@ import {
   FaMusic,
   FaImages,
 } from "react-icons/fa";
+import Drive from "../components/Drive";
+
+
 
 function AppLayout() {
   return (
@@ -22,7 +25,8 @@ function AppLayout() {
           minHeight: "89.5vh",
         }}
       >
-        <Sidebar backgroundColor="#212529">
+        <Sidebar backgroundColor="#212529" width="210px">
+          <div className="sidebar-heading mt-3 mb-3">Quick Access</div>
           <Menu
             rootStyles={{
               ["." + menuClasses.button]: {
@@ -43,6 +47,10 @@ function AppLayout() {
             <MenuItem icon={<FaMusic />}>Music</MenuItem>
             <MenuItem icon={<FaVideo />}>Videos</MenuItem>
           </Menu>
+          <hr />
+          <div className="sidebar-heading mt-3 m-3">Drive</div>
+          <Drive type={"C:"} color={"warning"} space={"25"} />
+          <Drive type={"D:"} color={"success"} space={"25"} />
         </Sidebar>
         <Outlet />
       </div>

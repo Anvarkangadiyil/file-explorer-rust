@@ -17,12 +17,32 @@ h6{
 
 body{
   background-color:gray;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 .quick-icon-size{
   height: 60px;
   width: 60px;
 }
 
+.sidebar-heading{
+  font-weight: bold;
+  color: #0dcaf0;
+  margin-left: 1em;
+  
+
+}
+
+hr{
+  color: #0dcaf0;
+  margin: 3px;
+}
 
 /*back button style*/
 
+.drive-container{
+  width: 180px;
+  height: fit-content;
+ font-size: 2em;
+  background-color: gray;
+  border-radius: 5px;
+}
