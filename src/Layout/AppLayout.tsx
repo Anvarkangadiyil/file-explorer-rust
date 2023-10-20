@@ -49,8 +49,8 @@ function AppLayout() {
           </Menu>
           <hr />
           <div className="sidebar-heading mt-3 m-3">Drive</div>
-          <Drive type={"C:"} color={"warning"} space={"25"} />
-          <Drive type={"D:"} color={"success"} space={"25"} />
+          <Drive type={"C:"} color={"success"} space={"25"} />
+          <Drive type={"D:"} color={"danger"} space={"90"} />
         </Sidebar>
         <Outlet />
       </div>

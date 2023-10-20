@@ -1,50 +1,56 @@
-function FileList() {
-  let fileList = [
-    ["a item", "JPG file", "10 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-    ["a item", "JPG file", "10 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-    ["a item", "JPG file", "10 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-    ["a item", "JPG file", "10 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-    ["a item", "JPG file", "10 KB"],
-    ["second file", "PDF", "11 MB"],
-    ["third file", "file/folder", "20 MB"],
-    ["fourth", "GIF", "200 KB"],
-  ];
 
+
+import { desktopDir } from '@tauri-apps/api/path';
+import { invoke } from "@tauri-apps/api";
+import { useEffect, useState } from "react";
+
+
+
+const desktopPath = await desktopDir();
+let fileDetails: string[] = [];
+
+
+const getList=async()=>{
+  try{
+    fileDetails= await invoke('get_file_list',{path:desktopPath});
+      console.log(fileDetails);
+    return fileDetails;
+  }catch(error){
+    console.error("error:",error);
+  }
+}
+
+
+
+
+function  FileList() {
+
+  useEffect(() => {
+    getList(); 
+  }, []);
+  
   return (
     <>
-      <table className="table table-success table-striped">
+    
+      <table className="table table-success mainBlock " >
         <thead className="table-dark">
           <tr>
             <th>Name</th>
-            <th>Type</th>
-            <th>Size</th>
           </tr>
         </thead>
-        {fileList.map((item) => (
-          <tbody>
-            <tr>
-              <td>{item[0]}</td>
-              <td>{item[1]}</td>
-              <td>{item[2]}</td>
-            </tr>
-          </tbody>
-        ))}
+        <tbody>
+        {
+           fileDetails.map( (item) => (
+           
+              <tr>
+                <td>{item}</td>
+              </tr>
+           
+          ))
+        }
+         </tbody>
       </table>
+      
     </>
   );
 }

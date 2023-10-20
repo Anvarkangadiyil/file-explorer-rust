@@ -2,14 +2,22 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+use rust_search::SearchBuilder;
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
+fn get_file_list(path:String)-> Vec<String>{
+
+let files: Vec<String> = SearchBuilder::default()
+    .location(path)
+    .depth(1)
+    .build()
+    .collect();
+
+    return files;
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![get_file_list])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
