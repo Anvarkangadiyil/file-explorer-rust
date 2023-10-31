@@ -42,7 +42,7 @@ hr{
 .drive-container{
   width: 180px;
   height: fit-content;
- font-size: 2em;
+  font-size: 2em;
   background-color: gray;
-  border-radius: 5px;
+  border-radius: 8px;
 }

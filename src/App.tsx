@@ -13,12 +13,14 @@ import FileList from "./components/FileList";
 
 //Layout
 import AppLayout from "./Layout/AppLayout";
+import FolderList from "./components/FolderList";
+import { desktopDir } from '@tauri-apps/api/path';
+const desktopPath = await desktopDir();
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppLayout />}>
-      <Route index element={<div></div>} />
-      <Route path="List" element={<FileList/>} />
+      <Route path="List" element={<FolderList/>} />
     </Route>
   )
 );

@@ -8,16 +8,26 @@ fn get_file_list(path:String)-> Vec<String>{
 
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
-    .depth(1)
+    .depth(2)
     .build()
     .collect();
+    return files;
+}
 
+#[tauri::command]
+fn Search(path:String,searchInp:String)-> Vec<String>{
+
+let files: Vec<String> = SearchBuilder::default()
+    .location(path)
+    .search_input(searchInp)
+    .build()
+    .collect();
     return files;
 }
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_file_list])
+        .invoke_handler(tauri::generate_handler![get_file_list,Search])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

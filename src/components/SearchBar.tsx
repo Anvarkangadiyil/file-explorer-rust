@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft ,FaArrowRight } from "react-icons/fa";
+import FolderList from "./FolderList";
 
 export function SearchBar() {
   const navigate = useNavigate();
@@ -12,6 +13,11 @@ export function SearchBar() {
     margin:"0 30px 0 30px"
     }
     
+
+      const handleSubmit = async () => {
+       return <FolderList/>
+       }
+     
   
 
   return (
@@ -33,7 +39,7 @@ export function SearchBar() {
           <button
             style={arrowButtonStyle}
             onClick={() => {
-              navigate(1);
+              navigate(+1);
             }}
           >
             <FaArrowRight />
@@ -45,7 +51,7 @@ export function SearchBar() {
             Turbo<h1>X</h1>plorer
           </h2>
         </a>
-        <form className="d-flex" role="search">
+        <form className="d-flex" role="search" onSubmit={handleSubmit}>
           <input
             className="form-control me-2"
             type="search"
@@ -62,3 +68,4 @@ export function SearchBar() {
 }
 
 export default SearchBar;
+

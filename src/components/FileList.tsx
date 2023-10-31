@@ -3,36 +3,44 @@
 import { desktopDir } from '@tauri-apps/api/path';
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
+import { Response } from '@tauri-apps/api/http';
+import React from 'react';
 
 
 
 const desktopPath = await desktopDir();
-let fileDetails: string[] = [];
+let fileDetails: String[] = [];
 
 
-const getList=async()=>{
-  try{
-    fileDetails= await invoke('get_file_list',{path:desktopPath});
-      console.log(fileDetails);
-    return fileDetails;
-  }catch(error){
-    console.error("error:",error);
-  }
+const currentPath=React.createContext(null);
+
+
+interface fileListProps{
+  dirPath:String,
 }
 
 
 
+function  FileList({dirPath}:fileListProps) {
 
-function  FileList() {
+  const [directoryItem,setDirectoryItem]=useState([]);
 
   useEffect(() => {
-    getList(); 
+    const getList=async()=>{
+      try{
+          setDirectoryItem(await invoke('get_file_list',{path:dirPath}));
+          console.log(fileDetails);  
+      }catch(error){
+        console.error("error:",error);
+      }
+    }
+  getList();
   }, []);
   
   return (
     <>
     
-      <table className="table table-success mainBlock " >
+      <table className="table table-success  striped mb-0">
         <thead className="table-dark">
           <tr>
             <th>Name</th>
@@ -40,12 +48,10 @@ function  FileList() {
         </thead>
         <tbody>
         {
-           fileDetails.map( (item) => (
-           
+           directoryItem.map( (item,index) => (
               <tr>
-                <td>{item}</td>
-              </tr>
-           
+                <td key={index}>{item}</td>
+              </tr> 
           ))
         }
          </tbody>

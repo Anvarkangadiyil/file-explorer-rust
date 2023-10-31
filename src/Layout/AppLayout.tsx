@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Sidebar, menuClasses } from "react-pro-sidebar";
 import SearchBar from "../components/SearchBar";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import {
   FaDownload,
   FaDesktop,
@@ -10,7 +10,27 @@ import {
   FaImages,
 } from "react-icons/fa";
 import Drive from "../components/Drive";
+import FolderList from "../components/FolderList";
+import { audioDir, desktopDir, documentDir, downloadDir, pictureDir, videoDir } from '@tauri-apps/api/path';
+import React from "react";
 
+
+
+export const pathContext=React.createContext(" ");
+
+
+function handlePath(path:String){
+
+  //hear change the state  of current path
+}
+
+
+const desktopPath=await desktopDir();
+const downloadPath=await downloadDir();
+const documentPath=await documentDir();
+const picturePath=await pictureDir();
+const musicPath=await audioDir();
+const videoPath=await videoDir();
 
 
 function AppLayout() {
@@ -38,19 +58,20 @@ function AppLayout() {
               },
             }}
           >
-            <MenuItem icon={<FaDesktop />} component={<Link to={"List"} />}>
+            <MenuItem icon={<FaDesktop />} component={<Link to={"List"}/>} onClick={()=>{handlePath(desktopPath)}}>
               Desktop
             </MenuItem>
-            <MenuItem icon={<FaDownload />}>Download</MenuItem>
-            <MenuItem icon={<FaFile />}>Documents</MenuItem>
-            <MenuItem icon={<FaImages />}>Picture</MenuItem>
-            <MenuItem icon={<FaMusic />}>Music</MenuItem>
-            <MenuItem icon={<FaVideo />}>Videos</MenuItem>
+            <MenuItem icon={<FaDownload /> } component={<Link to={"List"}/>} onClick={()=>{handlePath(downloadPath)}}>Download</MenuItem>
+            <MenuItem icon={<FaFile />} component={<Link to={"List"}/>} onClick={()=>{handlePath(documentPath)}}>Documents</MenuItem>
+            <MenuItem icon={<FaImages />} component={<Link to={"List"}/>} onClick={()=>{handlePath(picturePath)}}>Picture</MenuItem>
+            <MenuItem icon={<FaMusic />} component={<Link to={"List"}/>} onClick={()=>{handlePath(musicPath)}}>Music</MenuItem>
+            <MenuItem icon={<FaVideo />} component={<Link to={"List"}/>} onClick={()=>{handlePath(videoPath)}}>Videos</MenuItem>
           </Menu>
           <hr />
           <div className="sidebar-heading mt-3 m-3">Drive</div>
           <Drive type={"C:"} color={"success"} space={"25"} />
-          <Drive type={"D:"} color={"danger"} space={"90"} />
+          <Drive type={"D:"} color={"warning"} space={"70"} />
+          <Drive type={"E:"} color={"danger"} space={"90"} />
         </Sidebar>
         <Outlet />
       </div>
