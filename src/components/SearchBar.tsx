@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft ,FaArrowRight } from "react-icons/fa";
-import FolderList from "./FolderList";
+import { useMyContext } from "../Context/globalPathContext";
 
 export function SearchBar() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export function SearchBar() {
     
 
       const handleSubmit = async () => {
-       return <FolderList/>
+       
        }
      
   
@@ -55,7 +55,7 @@ export function SearchBar() {
           <input
             className="form-control me-2"
             type="search"
-            placeholder="Search File"
+            placeholder={useMyContext().globalState}
             aria-label="Search"
           />
           <button className="btn btn-outline-info" type="submit">

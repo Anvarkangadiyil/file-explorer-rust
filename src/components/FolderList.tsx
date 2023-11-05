@@ -1,32 +1,37 @@
 
 
-import { desktopDir } from '@tauri-apps/api/path';
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
+import { useMyContext } from '../Context/globalPathContext';
 
 
 
-const desktopPath = await desktopDir();
-let fileDetails: string[] = [];
 
 
-function FolderList() {
- 
+let fileDetails: String[] = [];
 
-  const [Items,setItem]=useState([" "]);
 
+
+
+
+
+function  FolderList() {
+
+  const [directoryItem,setDirectoryItem]=useState([]);
+
+
+  const context=useMyContext()
   useEffect(() => {
     const getList=async()=>{
       try{
-        fileDetails= await  invoke('get_file_list',{path:desktopPath});
-          console.log(fileDetails);
-        setItem(fileDetails);
+          setDirectoryItem(await invoke('get_file_list',{path:context.globalState}));
+          console.log(fileDetails);  
       }catch(error){
         console.error("error:",error);
       }
     }
-    getList();
-  }, []);
+  getList();
+  },[context.globalState]);
   
   return (
     <>
@@ -39,12 +44,10 @@ function FolderList() {
         </thead>
         <tbody>
         {
-           Items.map( (item) => (
-           
+           directoryItem.map( (item,index) => (
               <tr>
-                <td>{item}</td>
-              </tr>
-           
+                <td key={index}>{item}</td>
+              </tr> 
           ))
         }
          </tbody>

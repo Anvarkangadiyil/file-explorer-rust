@@ -8,7 +8,7 @@ fn get_file_list(path:String)-> Vec<String>{
 
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
-    .depth(2)
+    .depth(1)
     .build()
     .collect();
     return files;

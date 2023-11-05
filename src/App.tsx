@@ -13,19 +13,28 @@ import FileList from "./components/FileList";
 
 //Layout
 import AppLayout from "./Layout/AppLayout";
-import FolderList from "./components/FolderList";
-import { desktopDir } from '@tauri-apps/api/path';
-const desktopPath = await desktopDir();
+import { MyContextProvider } from "./Context/globalPathContext";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<AppLayout />}>
-      <Route path="List" element={<FolderList/>} />
+      <Route path="List" element={<FileList/>} />
     </Route>
   )
 );
 function App() {
-  return <RouterProvider router={router} />;
+
+
+
+  return (
+   <MyContextProvider>
+   <RouterProvider router={router} />
+   </MyContextProvider>
+      
+    
+
+  );
 }
 
 export default App;

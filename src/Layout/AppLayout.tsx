@@ -1,6 +1,6 @@
 import { Menu, MenuItem, Sidebar, menuClasses } from "react-pro-sidebar";
 import SearchBar from "../components/SearchBar";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import {
   FaDownload,
   FaDesktop,
@@ -10,19 +10,9 @@ import {
   FaImages,
 } from "react-icons/fa";
 import Drive from "../components/Drive";
-import FolderList from "../components/FolderList";
 import { audioDir, desktopDir, documentDir, downloadDir, pictureDir, videoDir } from '@tauri-apps/api/path';
-import React from "react";
+import { useMyContext } from "../Context/globalPathContext";
 
-
-
-export const pathContext=React.createContext(" ");
-
-
-function handlePath(path:String){
-
-  //hear change the state  of current path
-}
 
 
 const desktopPath=await desktopDir();
@@ -34,10 +24,18 @@ const videoPath=await videoDir();
 
 
 function AppLayout() {
+  
+    const context=useMyContext();
+
+     function handlePath(path:string){
+      context.setGlobalState(path)
+    }
+
+ 
   return (
     <>
+    
       <SearchBar />
-
       <div
         style={{
           display: "flex",
@@ -55,10 +53,11 @@ function AppLayout() {
                   backgroundColor: "#0dcaf0",
                   color: "#212529",
                 },
+               
               },
             }}
           >
-            <MenuItem icon={<FaDesktop />} component={<Link to={"List"}/>} onClick={()=>{handlePath(desktopPath)}}>
+            <MenuItem icon={<FaDesktop />} component={<Link to={"List"}/>} onClick={()=>{handlePath(desktopPath)}} active >
               Desktop
             </MenuItem>
             <MenuItem icon={<FaDownload /> } component={<Link to={"List"}/>} onClick={()=>{handlePath(downloadPath)}}>Download</MenuItem>
@@ -75,6 +74,7 @@ function AppLayout() {
         </Sidebar>
         <Outlet />
       </div>
+      
     </>
   );
 }
