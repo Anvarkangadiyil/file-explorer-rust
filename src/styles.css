@@ -4,10 +4,13 @@
   padding: 0px;
 }
 
-h1{
-  display: inline;
-  color: #0dcaf0;
+
+.title-x-style{
+  font-size:"34px";
+  color:"#0dcaf0"
 }
+
+
 
 
 h6{
