@@ -8,13 +8,8 @@ export const searchedList = " ";
 
 export function SearchBar() {
   const navigate = useNavigate();
+
   const context = useMyContext();
-
-  const [searchValue, setSearchValue] = useState('');
-
-  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
 
   const arrowButtonStyle = {
     border: "0",
@@ -22,6 +17,13 @@ export function SearchBar() {
     backgroundColor: "inherit",
     margin: "0 30px 0 30px",
   };
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
 
    async function handleSubmit  (event:React.FormEvent<HTMLFormElement>)  {
     
@@ -32,7 +34,8 @@ export function SearchBar() {
     
     if(searchText==" "){
       return;
-    }else{
+    }
+    else{
     context.setGlobalSearchState(
       await invoke("search_function", {
         path: context.globalState,

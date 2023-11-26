@@ -8,9 +8,9 @@ import React, {
 } from "react";
 
 type MyContextType = {
-  globalState: string; // Change the type according to your data
+  globalState: string; 
   setGlobalState: Dispatch<SetStateAction<string>>;
-  globalSearchState: string[]; // Change the type according to your data
+  globalSearchState: string[]; 
   setGlobalSearchState: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
@@ -19,7 +19,7 @@ const MyContext = createContext<MyContextType | undefined>(undefined);
 export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [globalState, setGlobalState] = React.useState<string>("C:\\");
+  const [globalState, setGlobalState] = React.useState<string>("Search here");
 
   const [globalSearchState, setGlobalSearchState] = React.useState<string[]>([
     " ",
@@ -42,7 +42,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
 export const useMyContext = () => {
   const context = useContext(MyContext);
   if (!context) {
-    throw new Error("useMyContext must be used within a MyContextProvider");
+    throw new Error("Context Error");
   }
   return context;
 };

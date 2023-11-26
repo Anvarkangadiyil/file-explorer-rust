@@ -28,10 +28,9 @@ function AppLayout() {
   
     const context=useMyContext();
 
-    const [selectedItem, setSelectedItem] = useState<string|null>(null);
+   
 
-     function handlePath(path:string){
-      setSelectedItem(path); 
+     function handlePath(path:string){ 
       context.setGlobalState(path);
     }
     
@@ -62,12 +61,6 @@ function AppLayout() {
                 },
                     
               },
-              "&.active": {
-                backgroundColor:"white",
-                color: "green",
-              },
-              
-             
             }}
           >
             <MenuItem icon={<FaDesktop />} component={<Link to={"List"}/>} onClick={()=>{handlePath(desktopPath)}} >

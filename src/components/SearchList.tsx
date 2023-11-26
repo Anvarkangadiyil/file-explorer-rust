@@ -1,23 +1,22 @@
 
 
 import { invoke } from "@tauri-apps/api";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMyContext } from '../Context/globalPathContext';
-import { searchedList } from "./SearchBar";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaRegFolder } from "react-icons/fa";
 
 
 
 
 
-let fileDetails: String[] = [];
 
 
 
 function  SearchList() {
   
   const context=useMyContext();
+  
   const navigate=useNavigate();
 
   const [directoryItem,setDirectoryItem]=useState([" "]);
@@ -54,7 +53,7 @@ function  SearchList() {
               <tr
               style={{cursor:"pointer"}} 
               >
-                <td key={index} onDoubleClick={()=>{
+                <td key={index} onClick={()=>{
                   handleTdClick(item);
                 }}>
                    <span className="me-2"><FaRegFolder/></span>

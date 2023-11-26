@@ -5,7 +5,7 @@ use std::{ path::Path};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 use rust_search::SearchBuilder;
-use tauri::api::{file, shell::open};
+
 #[tauri::command]
 fn get_file_list(path:String)-> Vec<String>{
 
@@ -22,7 +22,6 @@ fn search_function(path:String,search_inp:String)-> Vec<String>{
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
     .search_input(search_inp)
-    .depth(1)
     .ignore_case()
     .build()
     .collect();
@@ -35,10 +34,10 @@ let files: Vec<String> = SearchBuilder::default()
 
 #[tauri::command]
 fn check_file_extension(path: String) -> Option<String> {
-    // Create a Path from the file path
+   
     let path = Path::new(&path);
 
-    // Get the file extension
+   
     let extension = path.extension()?.to_str()?.to_string();
     Some(extension)
 }
@@ -48,7 +47,7 @@ fn check_file_extension(path: String) -> Option<String> {
 #[tauri::command]
 
 fn open_file(path:String){
-    let result=opener::open(std::path::Path::new(&path));
+    let _result=opener::open(std::path::Path::new(&path));
 }
 
 
