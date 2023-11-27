@@ -8,13 +8,24 @@ import {
   FaVideo,
   FaMusic,
   FaImages,
+  FaVolumeOff,
 } from "react-icons/fa";
 import Drive from "../components/Drive";
 import { audioDir, desktopDir, documentDir, downloadDir, pictureDir, videoDir } from '@tauri-apps/api/path';
 import { useMyContext } from "../Context/globalPathContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { invoke } from "@tauri-apps/api";
 
 
+
+
+interface Volume {
+  name: string;
+  mountpoint: string;
+  available_gb: number;
+  used_gb: number;
+  total_gb: number;
+}
 
 const desktopPath=await desktopDir();
 const downloadPath=await downloadDir();
@@ -24,19 +35,34 @@ const musicPath=await audioDir();
 const videoPath=await videoDir();
 
 
+  
+
 function AppLayout() {
   
     const context=useMyContext();
 
+    const [volumes,setVolumes]=useState<Volume[]>([]);
    
 
      function handlePath(path:string){ 
       context.setGlobalState(path);
     }
-    
 
+    
+    
+  useEffect(()=>{
+
+  const getVolume=async ()=>{
+    let volumeValue=await invoke<Volume[]>('get_volume');  
+    setVolumes(volumeValue);
+  }
+
+    getVolume();
+
+},[context.globalState])
  
   return (
+
     <>
     
       <SearchBar />
@@ -74,9 +100,13 @@ function AppLayout() {
           </Menu>
           <hr />
           <div className="sidebar-heading mt-3 m-3">Drive</div>
-          <Drive type={"C:"} color={"success"} space={"25"} />
-          <Drive type={"D:"} color={"warning"} space={"70"} />
-          <Drive type={"E:"} color={"danger"} space={"90"} />
+          {
+            volumes.map(
+             (volume)=>(
+                <Drive  color={"danger"} space={volume.available_gb.toString()} available_space={volume.available_gb} total_space={volume.total_gb} used_space={volume.used_gb} mountPoint={volume.mountpoint} name={volume.name}></Drive>
+             )
+            )
+          }
         </Sidebar>
         <div style={{
           width:"100vw",

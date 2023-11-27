@@ -97,6 +97,8 @@ export function SearchBar() {
           <button className="btn btn-outline-info" type="submit">
             Search
           </button>
+          
+ 
         </form>
       </div>
     </nav>

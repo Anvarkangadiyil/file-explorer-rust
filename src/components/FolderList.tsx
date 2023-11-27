@@ -1,11 +1,14 @@
 import { invoke, shell } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../Context/globalPathContext";
-import { FaFolder, FaRegFolder } from "react-icons/fa";
-import { open } from "@tauri-apps/api/shell";
-import { parsePath } from "react-router-dom";
+import { FaRegFolder } from "react-icons/fa";
+
 
 let fileDetails: string[] = [];
+
+
+
+
 
 
 
@@ -15,16 +18,20 @@ function FolderList() {
   const context = useMyContext();
 
   const handleTdClick =async (item: string) => {
-
+    
+    //checking the file which type if it null folder type
     const itemType=await invoke('check_file_extension',{path:item});
+
     if(itemType==null){
       context.setGlobalState(item);
     }else{
       console.log(itemType);
        await invoke('open_file',{path:item})
-     
     }
   };
+   
+
+ 
 
   useEffect(() => {
     const getList = async () => {
@@ -45,21 +52,24 @@ function FolderList() {
       <table className="table table-striped table-primary mb-0 table-hover">
         <thead className="table-dark">
           <tr>
-            
-            <th scope="col">Name</th>
+           <th scope="col">Name</th>
+           
           </tr>
         </thead >
         <tbody>
           {directoryItem.map((item) => (
             <tr style={{cursor:"pointer"}} >
               <td key={item}
-                onClick={() => {
+                onDoubleClick={() => {
                   handleTdClick(item);
                 }}
               >
                <span className="me-2"><FaRegFolder/></span>
-                {item}
+                {extractLastWord(item)}
               </td>
+              
+              
+             
             </tr>
           ))}
         </tbody>
@@ -68,9 +78,15 @@ function FolderList() {
   );
 }
 
-function replaceBackslashes(inputPath: string): string {
-  console.log( inputPath.replace(/\\/g, '\\'));
-  return inputPath.replace(/\\/g, '\\');
+function extractLastWord(path: string): string {
+  const pathParts: string[] = path.split("\\");
+  let lastWord: string = pathParts[pathParts.length - 1];
+  
+ if(lastWord==""){
+  lastWord="..";
+ }
+
+  return lastWord;
 }
 
 
