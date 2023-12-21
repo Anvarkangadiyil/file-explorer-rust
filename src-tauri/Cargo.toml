@@ -19,6 +19,7 @@ serde_json = "1.0"
 rust_search = "2.0.0"
 opener = "0.6.1"
 sysinfo = "0.29.11"
+tokio = "1.35.0"
 
 
 [features]

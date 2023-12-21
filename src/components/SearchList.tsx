@@ -28,7 +28,7 @@ function SearchList() {
 
   return (
     <>
-      <table className="table table-danger  striped mb-0 ">
+      <table className="table table-danger table-borderless table-hover striped mb-0 ">
         <thead className="table-dark">
           <tr>
             <th>Name</th>
@@ -47,6 +47,7 @@ function SearchList() {
                   <FaRegFolder />
                 </span>
                 {extractLastWord(item)}
+      
               </td>
             </tr>
           ))}

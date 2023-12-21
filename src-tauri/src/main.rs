@@ -4,7 +4,7 @@
 
 mod volume;
 
-use std::{ path::Path, alloc::System};
+use std::path::Path;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
@@ -26,7 +26,12 @@ let files: Vec<String> = SearchBuilder::default()
 }
 
 #[tauri::command]
-fn search_function(path:String,search_inp:String)-> Vec<String>{
+async fn search_function(path:String,search_inp:String)-> Vec<String>{
+
+if search_inp==" "{
+    return vec![String::from("Please enter the search")];  
+}
+    
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
     .search_input(search_inp)

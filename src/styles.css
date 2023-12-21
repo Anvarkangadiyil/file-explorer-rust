@@ -1,51 +1,132 @@
-
-*{
+* {
   margin: 0px;
   padding: 0px;
 }
 
-
-.title-x-style{
-  font-size:"34px";
-  color:"#0dcaf0"
-}
-
-
-
-
-h6{
+h6 {
   display: inline;
   color: white;
 }
 
-body{
-  background-color:gray;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+body {
+  background-color: gray;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
-.quick-icon-size{
+
+.pulse {
+  font-size: 40px;
+  color: #0dcaf0;
+  display: inline-block;
+  animation: pulse 1s infinite alternate;
+}
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}
+.fade {
+  font-size: 40px;
+  color: #0dcaf0;
+  display: inline-block;
+  animation: fade 2s infinite;
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+hr {
+  color: #0dcaf0;
+  margin: 1rem;
+}
+
+.title-x-style {
+  font-size: "34px";
+  color: "#0dcaf0";
+}
+
+.quick-icon-size {
   height: 60px;
   width: 60px;
 }
 
-.sidebar-heading{
+.sidebar-heading {
   font-weight: bold;
   color: #0dcaf0;
   margin-left: 1em;
-  
-
 }
 
-hr{
-  color: #0dcaf0;
-  margin: 1rem
-}
+/*drive component style*/
 
-/*back button style*/
-
-.drive-container{
+.drive-container {
   width: 180px;
   height: fit-content;
   font-size: 2em;
   background-color: gray;
   border-radius: 8px;
+}
+
+/*scroll bar style*/
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1d8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: #f1f1f1d8;
+}
+
+/* to remove deafult style of the search field*/
+.form-control:focus {
+  box-shadow: none;
+  border-width: 2px;
+}
+
+/*scroll top button style*/
+
+#myBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99;
+  border: none;
+  outline: none;
+  background-color: #888;
+  background-repeat: no-repeat;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 15px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: 500ms;
+}
+
+#myBtn:hover {
+  background-color: #555;
+  color: whitesmoke;
+  transform: scale(1.025);
 }

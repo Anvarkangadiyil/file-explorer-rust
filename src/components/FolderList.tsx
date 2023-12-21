@@ -1,4 +1,4 @@
-import { invoke, shell } from "@tauri-apps/api";
+import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../Context/globalPathContext";
 import { FaRegFolder } from "react-icons/fa";
@@ -6,16 +6,14 @@ import { FaRegFolder } from "react-icons/fa";
 
 let fileDetails: string[] = [];
 
-
-
-
-
-
-
 function FolderList() {
   const [directoryItem, setDirectoryItem] = useState([]);
 
+
+
   const context = useMyContext();
+
+
 
   const handleTdClick =async (item: string) => {
     
@@ -49,37 +47,37 @@ function FolderList() {
 
   return (
     <>
-      <table className="table table-striped table-primary mb-0 table-hover">
+      <table className="table table-striped table-primary mb-0 table-hover table-borderless">
         <thead className="table-dark">
           <tr>
            <th scope="col">Name</th>
            
           </tr>
         </thead >
-        <tbody>
+        <tbody className="">
           {directoryItem.map((item) => (
             <tr style={{cursor:"pointer"}} >
               <td key={item}
                 onDoubleClick={() => {
                   handleTdClick(item);
                 }}
+                style={{color:"black"}}
               >
                <span className="me-2"><FaRegFolder/></span>
                 {extractLastWord(item)}
               </td>
-              
-              
-             
             </tr>
           ))}
         </tbody>
+       
       </table>
     </>
   );
 }
 
-function extractLastWord(path: string): string {
+export function extractLastWord(path: string): string {
   const pathParts: string[] = path.split("\\");
+  
   let lastWord: string = pathParts[pathParts.length - 1];
   
  if(lastWord==""){

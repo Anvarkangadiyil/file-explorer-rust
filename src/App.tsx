@@ -34,15 +34,10 @@ const router = createBrowserRouter(
 );
 function App() {
 
-
-
   return (
    <MyContextProvider>
    <RouterProvider router={router} />
    </MyContextProvider>
-      
-    
-
   );
 }
 
