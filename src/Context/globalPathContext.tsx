@@ -19,7 +19,7 @@ const MyContext = createContext<MyContextType | undefined>(undefined);
 export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [globalState, setGlobalState] = React.useState<string>("Search here");
+  const [globalState, setGlobalState] = React.useState<string>("");
 
   const [globalSearchState, setGlobalSearchState] = React.useState<string[]>([
     " ",

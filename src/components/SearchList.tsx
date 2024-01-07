@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
-import { useMyContext } from "../Context/globalPathContext";
+import { useMyContext } from "../context/globalPathContext";
 import { useNavigate } from "react-router-dom";
 import { FaRegFolder } from "react-icons/fa";
 
@@ -47,7 +47,6 @@ function SearchList() {
                   <FaRegFolder />
                 </span>
                 {extractLastWord(item)}
-      
               </td>
             </tr>
           ))}
@@ -59,7 +58,7 @@ function SearchList() {
 
 function extractLastWord(path: string): string {
   const pathParts: string[] = path.split("\\");
-  
+
   let lastWord: string = pathParts[pathParts.length - 1];
 
   if (lastWord == "") {

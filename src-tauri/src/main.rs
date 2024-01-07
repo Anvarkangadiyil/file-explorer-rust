@@ -3,13 +3,15 @@
 
 
 mod volume;
+mod files;
 
-use std::path::Path;
+use std::{path::Path, vec};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 use rust_search::SearchBuilder;
 use volume::get_volume;
+use files::get_file_details;
 
 
 #[tauri::command]
@@ -20,17 +22,12 @@ let files: Vec<String> = SearchBuilder::default()
     .depth(1)
     .build()
     .collect();
-    return files;
-
-    
+    return files;   
 }
 
 #[tauri::command]
 async fn search_function(path:String,search_inp:String)-> Vec<String>{
 
-if search_inp==" "{
-    return vec![String::from("Please enter the search")];  
-}
     
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
@@ -44,7 +41,6 @@ let files: Vec<String> = SearchBuilder::default()
 }
 
 
-
 #[tauri::command]
 fn check_file_extension(path: String) -> Option<String> {
    
@@ -52,6 +48,7 @@ fn check_file_extension(path: String) -> Option<String> {
 
    
     let extension = path.extension()?.to_str()?.to_string();
+    
     Some(extension)
 }
 
@@ -66,7 +63,7 @@ fn open_file(path:String){
 fn main() {
      get_volume();
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_file_list,search_function,check_file_extension,open_file,get_volume])
+        .invoke_handler(tauri::generate_handler![get_file_list,search_function,check_file_extension,open_file,get_volume,get_file_details])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

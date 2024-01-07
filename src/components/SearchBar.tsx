@@ -1,8 +1,9 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useMyContext } from "../Context/globalPathContext";
+import { useMyContext } from "../context/globalPathContext";
 import { invoke } from "@tauri-apps/api/tauri";
+import { extractLastWord } from "./FolderList";
 
 export function SearchBar() {
   const navigate = useNavigate();
@@ -19,12 +20,17 @@ export function SearchBar() {
   const [searchValue, setSearchValue] = useState(" ");
   const [isSearching, setIsSearching] = useState(false);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const searchText = searchValue;
+
+    if (searchText.length == 0) {
+      return;
+    }
 
     if (isSearching) {
       return;
@@ -32,30 +38,36 @@ export function SearchBar() {
 
     document.documentElement.scrollTop = 0;
 
-    const searchText = searchValue;
-
-    if (searchText === " ") {
-      return;
-    }
-
     try {
       setIsSearching(true);
-      context.setGlobalSearchState(
-        await invoke("search_function", {
-          path: context.globalState,
-          searchInp: searchText.trim(),
-        })
-      );
+      let searchResultList: string[] = await invoke("search_function", {
+        path: context.globalState,
+        searchInp: searchText.trim(),
+      });
+
+      if (searchResultList.length == 0) {
+        navigate("error-page");
+      } else {
+        context.setGlobalSearchState(searchResultList);
+        navigate("Slist");
+      }
     } catch (error) {
       console.error("Error during search:", error);
     } finally {
       setIsSearching(false);
-      navigate("Slist");
     }
   };
 
+  //const rotateIconStyle = {
+  //  display: 'inline-block',
+  //  animation: isSearching ? 'rotate 1s infinite' : 'none',
+  //};
+
   return (
-    <nav className="navbar bg-body-tertiary fixed-top " data-bs-theme="dark">
+    <nav
+      className="navbar bg-body-tertiary fixed-top"
+      data-bs-theme="dark"
+    >
       <div className="container-fluid">
         <div>
           <button
@@ -79,7 +91,7 @@ export function SearchBar() {
         <a className="navbar-brand text-white">
           <h2>
             Turbo
-            <span className="fade">X</span>
+            <span className="fade fs-1">X</span>
             plorer
           </h2>
         </a>
@@ -93,7 +105,7 @@ export function SearchBar() {
           <input
             className="form-control me-2"
             type="search"
-            placeholder={context.globalState}
+            placeholder={"Search "+extractLastWord(context.globalState)}
             aria-label="Search"
             onChange={(event) => {
               handleChange(event);
@@ -105,7 +117,15 @@ export function SearchBar() {
             type="submit"
             disabled={isSearching}
           >
-            {isSearching ? "Searching..." : "Search"}
+            {isSearching != true ? (
+              <span className="fs-6">🔍</span>
+            ) : (
+              <span
+                className="spinner-border spinner-border-sm text-light"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
           </button>
         </form>
       </div>
@@ -113,4 +133,5 @@ export function SearchBar() {
   );
 }
 
+//<span style={rotateIconStyle}>🔍</span>
 export default SearchBar;

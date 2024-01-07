@@ -9,10 +9,11 @@ h6 {
 }
 
 body {
-  background-color: gray;
+  background-color:#212529;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+ 
 }
 
 .pulse {
@@ -21,12 +22,13 @@ body {
   display: inline-block;
   animation: pulse 1s infinite alternate;
 }
+
 @keyframes pulse {
   from {
     transform: scale(1);
   }
   to {
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 }
 .fade {
@@ -47,7 +49,7 @@ body {
 }
 
 hr {
-  color: #0dcaf0;
+  color:whitesmoke;
   margin: 1rem;
 }
 
@@ -68,7 +70,6 @@ hr {
 }
 
 /*drive component style*/
-
 .drive-container {
   width: 180px;
   height: fit-content;
@@ -81,6 +82,7 @@ hr {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
+  
 }
 
 ::-webkit-scrollbar-track {
@@ -99,10 +101,19 @@ hr {
   background-color: #f1f1f1d8;
 }
 
+
+
+
+
 /* to remove deafult style of the search field*/
 .form-control:focus {
   box-shadow: none;
-  border-width: 2px;
+  border-width: 1px;
+  border-color: #0dcaf0;
+}
+
+.form-control{
+border-color: #555;
 }
 
 /*scroll top button style*/
@@ -114,12 +125,12 @@ hr {
   z-index: 99;
   border: none;
   outline: none;
-  background-color: #888;
+  background-color: #212529;
   background-repeat: no-repeat;
   color: white;
   cursor: pointer;
   border-radius: 5px;
-  padding: 15px;
+  padding: 13px;
   font-size: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: 500ms;
@@ -130,3 +141,23 @@ hr {
   color: whitesmoke;
   transform: scale(1.025);
 }
+
+/*Search Animation*/
+
+/* YourStyles.css or your inline styles */
+@keyframes rotate {
+  0% {
+    transform: translateY(10);
+  }
+  50%{
+        transform: translateY(20);
+  }
+  100% {
+      transform: translateY(30);
+  }
+}
+
+.rotate-icon {
+  animation: rotate 3s infinite linear;
+}
+

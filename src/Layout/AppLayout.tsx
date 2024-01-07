@@ -19,10 +19,9 @@ import {
   pictureDir,
   videoDir,
 } from "@tauri-apps/api/path";
-import { useMyContext } from "../Context/globalPathContext";
+import { useMyContext } from "../context/globalPathContext";
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api";
-
 
 interface Volume {
   name: string;
@@ -39,25 +38,20 @@ const picturePath = await pictureDir();
 const musicPath = await audioDir();
 const videoPath = await videoDir();
 
-
 function AppLayout() {
-
- 
-  
   const context = useMyContext();
 
   const [volumes, setVolumes] = useState<Volume[]>([]);
 
   const [visible, setVisible] = useState("none");
 
-
   //scroll top button fuctions
   let scrollButton: HTMLElement | null = document.getElementById("myBtn");
-  
+
   if (scrollButton) {
     scrollButton.addEventListener("click", topFunction);
   }
-  
+
   function topFunction() {
     if (document.body) {
       document.body.scrollTop = 0;
@@ -66,7 +60,7 @@ function AppLayout() {
       document.documentElement.scrollTop = 0;
     }
   }
-  
+
   window.onscroll = function () {
     scrollFunction();
   };
@@ -86,7 +80,6 @@ function AppLayout() {
     }
   }
 
- 
   function handlePath(path: string) {
     context.setGlobalState(path);
     document.documentElement.scrollTop = 0;
@@ -111,11 +104,12 @@ function AppLayout() {
           minHeight: "89.9vh",
           marginTop: "5em",
         }}
+        onContextMenu={(e)=>{e.preventDefault()}}
       >
         <Sidebar
           backgroundColor="#212529"
           width="210px"
-          style={{ position: "fixed", height: "100%", minHeight: "89.9vh" }}
+          style={{ position: "fixed", height: "100%", minHeight: "89.9vh" ,borderColor:"#555"}}
         >
           <div className="sidebar-heading mt-3 mb-3">Quick Access</div>
           <Menu
@@ -203,7 +197,6 @@ function AppLayout() {
             width: "100vw",
             height: "inherit",
           }}
-          
         >
           <Outlet />
           <button id="myBtn" style={{ display: visible }}>
@@ -211,7 +204,6 @@ function AppLayout() {
           </button>
         </div>
       </div>
-      
     </>
   );
 }
