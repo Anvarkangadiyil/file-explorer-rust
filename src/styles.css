@@ -113,7 +113,7 @@ hr {
 }
 
 .form-control{
-border-color: #555;
+border-color: gray;
 }
 
 /*scroll top button style*/
@@ -159,5 +159,13 @@ border-color: #555;
 
 .rotate-icon {
   animation: rotate 3s infinite linear;
+  
+}
+
+.select-menuItem-color{
+  background-color:#0dcaf0;
+  border-left:  3px solid #212529;
+  border-right:  3px solid #212529;
+
 }
 

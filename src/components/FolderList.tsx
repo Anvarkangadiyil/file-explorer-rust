@@ -1,21 +1,16 @@
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../context/globalPathContext";
-import { FaDatabase, FaFileAudio, FaFilePdf, FaFileVideo, FaFileWord, FaRegFolder } from "react-icons/fa";
+import { FileDetailModel } from "../model/model";
 
 let fileDetails: string[] = [];
 
-interface FileDetails{
-    file_name:string,
-    file_type: String,
-    size: number,
-    date:String,
-}
+
 
 
 
 function FolderList() {
-  const [directoryItem, setDirectoryItem] = useState<FileDetails[]>([]);
+  const [directoryItem, setDirectoryItem] = useState<FileDetailModel[]>([]);
 
   const context = useMyContext();
 
@@ -25,7 +20,7 @@ function FolderList() {
 
     const itemType = await invoke("check_file_extension", { path: item });
 
-    if (itemType == null) {
+    if (itemType == "Folder") {
       context.setGlobalState(item);
     } else {
       console.log(itemType);
@@ -36,9 +31,8 @@ function FolderList() {
   useEffect(() => {
     const getList = async () => {
       try {
-        let files=await invoke("get_file_list", { path: context.globalState });
         setDirectoryItem(
-          await invoke("get_file_details",{files:files})
+          await invoke("get_file_details",{path:context.globalState})
         );
         console.log(fileDetails);
       } catch (error) {

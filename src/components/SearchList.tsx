@@ -14,7 +14,7 @@ function SearchList() {
   async function handleTdClick(item: string) {
     const itemType = await invoke("check_file_extension", { path: item });
 
-    if (itemType == null) {
+    if (itemType == "Folder") {
       context.setGlobalState(item);
       navigate(-1);
     } else {

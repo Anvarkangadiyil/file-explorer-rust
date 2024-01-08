@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/globalPathContext";
 
-interface Props {
+
+interface DriveDetailProps {
   mountPoint: string;
   color: String;
   available_space: number;
@@ -10,6 +11,7 @@ interface Props {
   name: String;
 }
 
+
 function Drive({
   name,
   mountPoint,
@@ -17,7 +19,7 @@ function Drive({
   available_space,
   total_space,
   used_space,
-}: Props) {
+}: DriveDetailProps) {
   let usedGBper = (used_space / total_space) * 100;
 
   if (usedGBper < 30) {
@@ -40,7 +42,7 @@ function Drive({
 
   return (
     <div
-      className="drive-container mt-3  ms-3 p-1"
+      className="drive-container mt-3  ms-3  p-1"
       style={{ cursor: "pointer" }}
       onDoubleClick={() => {
         handleDiskCLick();

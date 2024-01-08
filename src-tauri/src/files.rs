@@ -6,6 +6,7 @@ use std::fs::{self, metadata};
 use std::path::Path;
 use chrono::prelude::*;
 use chrono::DateTime;
+use rust_search::SearchBuilder;
 use serde::Serialize;
 
 #[derive(Debug)]
@@ -20,7 +21,14 @@ pub struct FileDetails{
 
 
 #[tauri::command]
-pub fn get_file_details(files: Vec<String>)->Vec<FileDetails> {
+pub fn get_file_details(path:String)->Vec<FileDetails> {
+
+    let files: Vec<String> = SearchBuilder::default()
+    .location(path)
+    .depth(1)
+    .build()
+    .collect();
+      
     
     let mut file_details_list = Vec::new();
     
@@ -45,7 +53,7 @@ pub fn get_file_details(files: Vec<String>)->Vec<FileDetails> {
 }
 
 
-pub fn file_modified_date_and_time(path: &str) -> String {
+ fn file_modified_date_and_time(path: &str) -> String {
     let modified_time = fs::metadata(path)
         .expect("Failed to retrieve file metadata")
         .modified()
@@ -66,21 +74,8 @@ pub fn file_modified_date_and_time(path: &str) -> String {
     result
 }
 
-pub fn check_file_extension(path: String) -> Option<String> {
-   
-    let path = Path::new(&path);
 
-    let file_type= match path.extension() {
-        Some(_) => path.extension()?.to_str()?.to_string(),
-        None => String::from("Folder"),
-    };
-
-  Some(file_type)
-}
-    
-    
-    
-pub fn find_file_size(file_path: &str) -> Option<f64> {
+ fn find_file_size(file_path: &str) -> Option<f64> {
     if let Ok(metadata) = metadata(file_path) {
         // Retrieve the size from the metadata
         if check_file_extension(file_path.to_owned())==Some("Folder".to_string()){
@@ -93,4 +88,45 @@ pub fn find_file_size(file_path: &str) -> Option<f64> {
         // Return None if metadata retrieval fails
         None
     }
+}
+
+
+
+
+
+
+#[tauri::command]
+pub fn check_file_extension(path: String) -> Option<String> {
+   
+    let path = Path::new(&path);
+
+    let file_type= match path.extension() {
+        Some(_) => path.extension()?.to_str()?.to_string(),
+        None => String::from("Folder"),
+    };
+
+  Some(file_type)
+}
+
+
+#[tauri::command]
+pub fn open_file(path:String){
+    let _result=opener::open(std::path::Path::new(&path));
+}
+
+
+
+#[tauri::command]
+pub async fn search_function(path:String,search_inp:String)-> Vec<String>{
+
+    
+let files: Vec<String> = SearchBuilder::default()
+    .location(path)
+    .search_input(search_inp)
+    .ignore_case()
+    .build()
+    .collect();
+
+    println!("{:#?}",files);
+    return files;
 }
