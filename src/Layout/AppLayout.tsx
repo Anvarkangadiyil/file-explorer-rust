@@ -6,19 +6,28 @@ import { FaArrowUp } from "react-icons/fa";
 import { useMyContext } from "../context/globalPathContext";
 import { desktopDir } from "@tauri-apps/api/path";
 
-const desktopPath = await desktopDir();
-
 function AppLayout() {
   const [visible, setVisible] = useState("none");
+  const [intialPath, setIntialPath] = useState("");
   const OutletRef = useRef<HTMLDivElement | null>(null);
   const scrollButtonRef = useRef<HTMLButtonElement | null>(null);
 
-  // for setting the initial list as desktop
   const navigate = useNavigate();
   const context = useMyContext();
+
+  // for setting the initial list as desktop
   useEffect(() => {
-    context.setGlobalState(desktopPath);
-    navigate("List");
+    const initPath = async () => {
+      try {
+        const deskPath = await desktopDir();
+
+        navigate("List");
+        context.setGlobalState(deskPath);
+      } catch (e) {
+        console.log("can't fetch intial path: " + e);
+      }
+    };
+    initPath();
   }, []);
 
   function scrollFunction() {
@@ -92,7 +101,7 @@ function AppLayout() {
             width: "100vw",
             height: "inherit",
             overflowY: "auto",
-            overflowX:"auto",
+            overflowX: "auto",
             scrollBehavior: "smooth",
           }}
           className="table-container"
