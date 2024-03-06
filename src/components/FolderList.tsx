@@ -27,6 +27,7 @@ function FolderList() {
   };
 
   useEffect(() => {
+    hideContextMenu();
     const getList = async () => {
       try {
         setDirectoryItem(
