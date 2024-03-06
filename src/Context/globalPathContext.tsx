@@ -6,13 +6,16 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
+import { FileDetailModel } from "../model/model";
 
 type MyContextType = {
   globalState: string; 
   setGlobalState: Dispatch<SetStateAction<string>>;
-  globalSearchState: string[]; 
-  setGlobalSearchState: React.Dispatch<React.SetStateAction<string[]>>;
+  globalSearchState: FileDetailModel[]; 
+  setGlobalSearchState: React.Dispatch<React.SetStateAction<FileDetailModel[]>>;
 };
+
+
 
 const MyContext = createContext<MyContextType | undefined>(undefined);
 
@@ -21,8 +24,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [globalState, setGlobalState] = React.useState<string>(" ");
 
-  const [globalSearchState, setGlobalSearchState] = React.useState<string[]>([
-    " ",
+  const [globalSearchState, setGlobalSearchState] = React.useState<FileDetailModel[]>([
+    
   ]);
 
   return (

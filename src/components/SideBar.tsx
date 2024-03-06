@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { audioDir, desktopDir, documentDir, downloadDir, pictureDir, videoDir } from "@tauri-apps/api/path";
 import { Volume } from "../model/model";
 import { invoke } from "@tauri-apps/api";
-
+import { checkPathContain } from "./functions/Function";
 
 
 const desktopPath = await desktopDir();
@@ -17,18 +17,26 @@ const picturePath = await pictureDir();
 const musicPath = await audioDir();
 const videoPath = await videoDir();
 
+
 function SideBar(){
 
     const context = useMyContext();
+    
+    
 
-    const [_, setSelectedMenuItem] = useState<string>("none");
+
     
   const [volumes, setVolumes] = useState<Volume[]>([]);
     function handlePath(path: string) {
         context.setGlobalState(path);
-        setSelectedMenuItem(path);
+       // setSelectedMenuItem(path);
         document.documentElement.scrollTop = 0;
       }
+     
+      
+      
+
+      
 
       useEffect(() => {
         const getVolume = async () => {
@@ -38,7 +46,8 @@ function SideBar(){
     
         getVolume();
       }, [context.globalState]);
-    
+   
+
     return(
         <Sidebar
         backgroundColor="#212529"
@@ -59,6 +68,7 @@ function SideBar(){
                 backgroundColor: "gray",
                 borderLeft:"3px solid #212529",
                 borderRight:"3px solid #212529",
+                borderRadius:"5px"
               },
               
             },
@@ -71,7 +81,7 @@ function SideBar(){
               handlePath(desktopPath);
             }}
             className={
-              context.globalState == desktopPath ? "select-menuItem-color" : ""
+              checkPathContain(desktopPath,context.globalState)? "select-menuItem-color" : ""
             }
           
           >
@@ -84,7 +94,7 @@ function SideBar(){
               handlePath(downloadPath);
             }}
             className={
-              context.globalState == downloadPath ? "select-menuItem-color" : "" 
+              checkPathContain(downloadPath,context.globalState)? "select-menuItem-color" : "" 
             }
           >
             Download
@@ -96,7 +106,7 @@ function SideBar(){
               handlePath(documentPath);
             }}
             className={
-              context.globalState == documentPath ? "select-menuItem-color" : ""
+              checkPathContain(documentPath,context.globalState) ? "select-menuItem-color" : ""
             }
           >
             Documents
@@ -108,7 +118,7 @@ function SideBar(){
               handlePath(picturePath);
             }}
             className={
-              context.globalState == picturePath ? "select-menuItem-color" : ""
+              checkPathContain(picturePath,context.globalState)? "select-menuItem-color" : ""
             }
           >
             Picture
@@ -120,7 +130,7 @@ function SideBar(){
               handlePath(musicPath);
             }}
             className={
-              context.globalState == musicPath ? "select-menuItem-color" : ""
+              checkPathContain(musicPath,context.globalState) ? "select-menuItem-color" : ""
             }
           >
             Music
@@ -132,7 +142,7 @@ function SideBar(){
               handlePath(videoPath);
             }}
             className={
-              context.globalState == videoPath ? "select-menuItem-color" : ""
+              checkPathContain(videoPath,context.globalState) ? "select-menuItem-color" : ""
             }
           >
             Videos
@@ -150,9 +160,9 @@ function SideBar(){
             name={volume.name}
           ></Drive>
         ))}
-        
       </Sidebar>
     );
 }
+
 
  export default SideBar;

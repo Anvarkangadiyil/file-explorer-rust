@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/globalPathContext";
-
+import { Tooltip } from "react-tooltip";
 
 interface DriveDetailProps {
   mountPoint: string;
@@ -10,7 +10,6 @@ interface DriveDetailProps {
   used_space: number;
   name: String;
 }
-
 
 function Drive({
   name,
@@ -47,6 +46,10 @@ function Drive({
       onDoubleClick={() => {
         handleDiskCLick();
       }}
+      data-tooltip-id="drive-container"
+      data-tooltip-content={"Drive " + mountPoint}
+      data-tooltip-class-name="fs-6"
+      data-tooltip-variant="info"
     >
       <h5>
         {name}({mountPoint})
@@ -65,6 +68,7 @@ function Drive({
       <div className="fs-6 text-light ">
         {available_space}GB free of {total_space}GB
       </div>
+      <Tooltip id="drive-container" place="right-end" />
     </div>
   );
 }

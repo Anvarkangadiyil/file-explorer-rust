@@ -1,15 +1,68 @@
-import { invoke } from "@tauri-apps/api";
+import { dialog, invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useMyContext } from "../context/globalPathContext";
 import { useNavigate } from "react-router-dom";
-import { FaRegFolder } from "react-icons/fa";
+import { extractLastWord, iconChecker } from "./functions/Function";
+import { FileDetailModel } from "../model/model";
+import { useContextMenu } from "./ContextMenu/contextMenuHook";
+import { confirm } from "@tauri-apps/api/dialog";
+import ContextMenu from "./ContextMenu/ContextMenu";
 
 function SearchList() {
   const context = useMyContext();
 
   const navigate = useNavigate();
+  
 
-  const [directoryItem, setDirectoryItem] = useState([" "]);
+  const [reRender, setReRender] = useState(0);
+
+  const { isVisible, position, currentPath, showContextMenu, hideContextMenu } =
+    useContextMenu();
+
+    const handleContextButtonClick = async (actionType: String) => {
+   
+      if (actionType == "newFolder") {
+        if (currentPath?.file_type == "Folder") {
+          
+          let name = prompt("Enter new folder name");
+          if (name == undefined) {
+            return;
+          } else {
+            await invoke("create_folder_command", {
+              path: currentPath.file_name,
+              name: name,
+            });
+          }
+          context.setGlobalState(currentPath.file_name);
+          setReRender(reRender + 1);
+        }
+      } else if (actionType == "delete") {
+       
+        let newSearchResultList:FileDetailModel[]= context.globalSearchState.filter((item)=>item.file_name !== currentPath?.file_name);
+    
+        const confirmation = await confirm("do you want to delete the file?", {
+          title: currentPath?.file_name,
+          type: "info",
+        });
+  
+        if (confirmation == true) {
+          await invoke("delete_folder_command", {
+            path: currentPath?.file_name,
+          });
+          context.setGlobalSearchState(newSearchResultList);
+        }
+  
+        setReRender(reRender + 1);
+      }
+      else if(actionType=='open'){
+        if(currentPath){
+         dialog.open({defaultPath:currentPath.file_name});
+        }
+      }
+      hideContextMenu();
+    };
+
+  const [directoryItem, setDirectoryItem] = useState<FileDetailModel[]>([]);
 
   async function handleTdClick(item: string) {
     const itemType = await invoke("check_file_extension", { path: item });
@@ -26,46 +79,60 @@ function SearchList() {
     setDirectoryItem(context.globalSearchState);
   });
 
+
+ 
   return (
-    <>
-      <table className="table table-danger table-borderless table-hover striped mb-0 ">
+    <div id="search-list" style={{ scrollBehavior: "smooth" }}>
+      <table className="table table-danger table-borderless  table-hover striped mb-0 ">
         <thead className="table-dark">
           <tr>
-            <th>Name</th>
+            <th scope="col" >Name</th>
+            <th scope="col">Date modified</th>
+            <th scope="col">Type</th>
+            <th scope="col">Size</th>
           </tr>
         </thead>
         <tbody>
           {directoryItem.map((item, index) => (
-            <tr style={{ cursor: "pointer" }}>
+            <tr style={{ cursor: "pointer" }} 
+            onDoubleClick={()=>{handleTdClick(item.file_name)}}
+            onContextMenu={(e) => showContextMenu(e, item)}
+            >
               <td
+              className="fixed-column"
                 key={index}
-                onDoubleClick={() => {
-                  handleTdClick(item);
-                }}
               >
                 <span className="me-2">
-                  <FaRegFolder />
+                  {
+                    iconChecker(item.file_type)
+                  }
                 </span>
-                {extractLastWord(item)}
+                {extractLastWord(item.file_name)}
               </td>
+              <td className="fixed-column">
+                {item.date}
+              </td>
+              <td className="fixed-column">
+                {item.file_type}
+              </td>
+              <td className="fixed-column">
+              {item.size == null ? "" : item.size.toFixed(3) + " KB"}
+              </td>
+              
             </tr>
           ))}
         </tbody>
       </table>
-    </>
+      <ContextMenu
+        isVisible={isVisible}
+        position={position}
+        currentPath={currentPath}
+        onContextButtonClick={handleContextButtonClick}
+      />
+    </div>
   );
 }
 
-function extractLastWord(path: string): string {
-  const pathParts: string[] = path.split("\\");
 
-  let lastWord: string = pathParts[pathParts.length - 1];
-
-  if (lastWord == "") {
-    lastWord = "..";
-  }
-
-  return lastWord;
-}
 
 export default SearchList;

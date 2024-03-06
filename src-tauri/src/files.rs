@@ -4,6 +4,7 @@
 
 use std::fs::{self, metadata};
 use std::path::Path;
+use std::io::{self};
 use chrono::prelude::*;
 use chrono::DateTime;
 use rust_search::SearchBuilder;
@@ -117,7 +118,7 @@ pub fn open_file(path:String){
 
 
 #[tauri::command]
-pub async fn search_function(path:String,search_inp:String)-> Vec<String>{
+pub async fn search_function(path:String,search_inp:String)->Vec<FileDetails>{
 
     
 let files: Vec<String> = SearchBuilder::default()
@@ -126,7 +127,54 @@ let files: Vec<String> = SearchBuilder::default()
     .ignore_case()
     .build()
     .collect();
+    let mut file_details_list = Vec::new();
 
-    println!("{:#?}",files);
-    return files;
+    for file in files {
+        let file_name=file.clone();
+        let file_type=check_file_extension(file.clone());
+        let file_size=find_file_size(&file);
+        let file_mode=file_modified_date_and_time(&file);
+        
+        let file_details = FileDetails {
+            file_name:file_name,
+            file_type:file_type,
+            size: file_size,
+            date: file_mode,
+        };
+        
+        file_details_list.push(file_details);
+        
+    }
+    
+    file_details_list 
 }
+
+
+fn create_folder(path: String,name:&str) -> io::Result<()> {
+    fs::create_dir(path+"\\"+name)?;
+    Ok(())
+}
+
+#[tauri::command]
+ pub fn create_folder_command(path:String,name:String) -> Result<(), String> {
+    match create_folder(path,&name) {
+        Ok(_) => Ok(()),
+        Err(err) => Err(format!("Error: {}", err)),
+    }
+}
+
+#[tauri::command]
+pub fn delete_folder_command(path:String){
+   match check_file_extension(path.clone()) {
+       Some(file_type)=>{
+        if file_type=="Folder"
+        {
+            fs::remove_dir_all(&path).unwrap();
+        }else{
+            fs::remove_file(&path).unwrap();
+        }
+       },
+       None=>todo!()
+   }
+}
+

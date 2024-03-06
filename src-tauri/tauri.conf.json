@@ -19,6 +19,17 @@
       },
       "path": {
         "all": true
+      },
+      "dialog": {
+        "all": true, 
+        "ask": true, 
+        "confirm": true, 
+        "message": true, 
+        "open": true,
+        "save": true 
+      },
+      "notification": {
+        "all": true 
       }
 
     },
@@ -27,7 +38,6 @@
       "targets": "all",
       "identifier": "com.tauri.dev",
       "icon": [
-        "src/assets/icon.jpg",
         "icons/32x32.png",
         "icons/128x128.png",
         "icons/128x128@2x.png",

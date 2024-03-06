@@ -3,7 +3,7 @@
 
 export interface FileDetailModel{
     file_name:string,
-    file_type: String,
+    file_type: string,
     size: number,
     date:String,
 }

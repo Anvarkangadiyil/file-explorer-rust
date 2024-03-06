@@ -3,7 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useMyContext } from "../context/globalPathContext";
 import { invoke } from "@tauri-apps/api/tauri";
-import { extractLastWord } from "./FolderList";
+import { extractLastWord } from "./functions/Function";
+import { Tooltip } from 'react-tooltip';
+import { dialog } from "@tauri-apps/api";
+import { FileDetailModel } from "../model/model";
+
+
 
 export function SearchBar() {
   const navigate = useNavigate();
@@ -40,13 +45,12 @@ export function SearchBar() {
 
     try {
       setIsSearching(true);
-      let searchResultList: string[] = await invoke("search_function", {
+      let searchResultList:FileDetailModel[] = await invoke("search_function", {
         path: context.globalState,
         searchInp: searchText.trim(),
       });
-
       if (searchResultList.length == 0) {
-        navigate("error-page");
+        await dialog.message(searchText+" is not found",{title:"Message",type:"error"});
       } else {
         context.setGlobalSearchState(searchResultList);
         navigate("Slist");
@@ -72,7 +76,7 @@ export function SearchBar() {
         <div>
           <button
             style={arrowButtonStyle}
-            onClick={() => {
+            onClick={async () => {
               navigate(-1);
             }}
           >
@@ -88,7 +92,7 @@ export function SearchBar() {
           </button>
         </div>
 
-        <a className="navbar-brand text-white">
+        <a className="navbar-brand mx-auto text-white">
           <h2>
             Turbo
             <span className="fade fs-1">X</span>
@@ -96,38 +100,46 @@ export function SearchBar() {
           </h2>
         </a>
         <form
-          className="d-flex"
-          role="search"
-          onSubmit={(event) => {
-            handleSubmit(event);
-          }}
-        >
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder={"Search "+extractLastWord(context.globalState)}
-            aria-label="Search"
-            onChange={(event) => {
-              handleChange(event);
-            }}
-            id="search-inp"
-          />
-          <button
-            className="btn btn-outline-info"
-            type="submit"
-            disabled={isSearching}
-          >
-            {isSearching != true ? (
-              <span className="fs-6">🔍</span>
-            ) : (
-              <span
-                className="spinner-border spinner-border-sm text-light"
-                role="status"
-                aria-hidden="true"
-              ></span>
-            )}
-          </button>
-        </form>
+  className="d-flex custom-search-form"
+  role="search"
+  onSubmit={(event) => {
+    handleSubmit(event);
+  }}
+>
+  <input
+    className="form-control me-2 custom-search-input"
+    type="search"
+    placeholder={"Search " + extractLastWord(context.globalState)}
+    aria-label="Search"
+    onChange={(event) => {
+      handleChange(event);
+    }}
+    id="search-inp"
+  />
+  
+  <button
+    className="btn btn-outline-info custom-search-button"
+    type="submit"
+    disabled={isSearching}
+    data-tooltip-id="search-tooltip" 
+    data-tooltip-content="Search button"
+    data-tooltip-variant="info"
+    
+  >
+    {isSearching !== true ? (
+      <span className="fs-6">🔍</span>
+    ) : (
+      <span
+        className="spinner-border spinner-border-sm text-light "
+        role="status"
+        aria-hidden="true"
+      ></span>
+    )}
+  </button>
+  <Tooltip id="search-tooltip" place="top-start"/>
+  
+   </form>
+
       </div>
     </nav>
   );
