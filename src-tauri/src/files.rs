@@ -20,9 +20,10 @@ pub struct FileDetails{
 }
 
 
-
+// to get the file list in the given path
 #[tauri::command]
 pub fn get_file_details(path:String)->Vec<FileDetails> {
+    
 
     let files: Vec<String> = SearchBuilder::default()
     .location(path)
@@ -54,6 +55,8 @@ pub fn get_file_details(path:String)->Vec<FileDetails> {
 }
 
 
+
+// function that return the date modified of given path file
  fn file_modified_date_and_time(path: &str) -> String {
     let modified_time = fs::metadata(path)
         .expect("Failed to retrieve file metadata")
@@ -76,6 +79,8 @@ pub fn get_file_details(path:String)->Vec<FileDetails> {
 }
 
 
+
+ //to find the size of the file in given path
  fn find_file_size(file_path: &str) -> Option<f64> {
     if let Ok(metadata) = metadata(file_path) {
         // Retrieve the size from the metadata
@@ -93,9 +98,7 @@ pub fn get_file_details(path:String)->Vec<FileDetails> {
 
 
 
-
-
-
+// to check the file type 
 #[tauri::command]
 pub fn check_file_extension(path: String) -> Option<String> {
    
@@ -110,6 +113,8 @@ pub fn check_file_extension(path: String) -> Option<String> {
 }
 
 
+
+//to open a file in given path using default native software
 #[tauri::command]
 pub fn open_file(path:String){
     let _result=opener::open(std::path::Path::new(&path));
@@ -117,6 +122,8 @@ pub fn open_file(path:String){
 
 
 
+
+//function to search in given path based on the given search text
 #[tauri::command]
 pub async fn search_function(path:String,search_inp:String)->Vec<FileDetails>{
 
@@ -145,7 +152,7 @@ let files: Vec<String> = SearchBuilder::default()
         file_details_list.push(file_details);
         
     }
-    
+    println!("{:?}",file_details_list);
     file_details_list 
 }
 
@@ -155,6 +162,8 @@ fn create_folder(path: String,name:&str) -> io::Result<()> {
     Ok(())
 }
 
+
+// function for create a new Folder in given path 
 #[tauri::command]
  pub fn create_folder_command(path:String,name:String) -> Result<(), String> {
     match create_folder(path,&name) {

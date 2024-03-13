@@ -16,6 +16,8 @@ function SearchList() {
 
   const [reRender, setReRender] = useState(0);
 
+  const [copyPath, setCopyPath] = useState("");
+
   const { isVisible, position, currentPath, showContextMenu, hideContextMenu } =
     useContextMenu();
 
@@ -58,6 +60,20 @@ function SearchList() {
         if(currentPath){
          dialog.open({defaultPath:currentPath.file_name});
         }
+      } else if (actionType === "copy") {
+        if (currentPath) {
+          setCopyPath(currentPath.file_name);
+        }
+        dialog.message("Copied successfully");
+      } else if (actionType === "paste") {
+        if (currentPath && copyPath) {
+          await invoke('copy_file',{source:copyPath,destination:currentPath.file_name}).then(() => {
+            dialog.message("Pasted successfully");
+            setReRender(reRender+1);
+          }).catch((error) => {
+            dialog.message(error);
+          });
+        }
       }
       hideContextMenu();
     };
@@ -74,7 +90,9 @@ function SearchList() {
       await invoke("open_file", { path: item });
     }
   }
+ 
 
+  // the content showed in the search List the data list in globalSearchState
   useEffect(() => {
     setDirectoryItem(context.globalSearchState);
   });
@@ -82,7 +100,7 @@ function SearchList() {
 
  
   return (
-    <div id="search-list" style={{ scrollBehavior: "smooth" }}>
+    <div id="search-list" style={{ scrollBehavior: "smooth" }} onClick={()=>{hideContextMenu()}}>
       <table className="table table-danger table-borderless  table-hover striped mb-0 ">
         <thead className="table-dark">
           <tr>

@@ -29,35 +29,52 @@ export function SearchBar() {
     setSearchValue(event.target.value);
   };
 
+
+  //to handle search button
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const searchText = searchValue;
+ 
 
+    //if the input is empty do nothing
     if (searchText.length == 0) {
       return;
     }
+  
 
+    //if the app is current searching do nothing
     if (isSearching) {
       return;
     }
 
     document.documentElement.scrollTop = 0;
 
+    
+   
     try {
+      //set cuurently searching
       setIsSearching(true);
+
+      //invoking backend function to get the search Result Array
       let searchResultList:FileDetailModel[] = await invoke("search_function", {
         path: context.globalState,
         searchInp: searchText.trim(),
       });
+
+      // if th search not found show dialog message
       if (searchResultList.length == 0) {
         await dialog.message(searchText+" is not found",{title:"Message",type:"error"});
-      } else {
+      } 
+      //if searched file is present the global search List State is set to the resulted search Array 
+      // and navigated to SearList component
+      else {
         context.setGlobalSearchState(searchResultList);
         navigate("Slist");
       }
     } catch (error) {
       console.error("Error during search:", error);
     } finally {
+      // finally set currently not searching after the search
       setIsSearching(false);
     }
   };
@@ -69,7 +86,7 @@ export function SearchBar() {
 
   return (
     <nav
-      className="navbar bg-body-tertiary fixed-top"
+      className="navbar bg-body-tertiary fixed-top "
       data-bs-theme="dark"
     >
       <div className="container-fluid">

@@ -6,14 +6,16 @@ import { FaArrowUp } from "react-icons/fa";
 import { useMyContext } from "../context/globalPathContext";
 import { desktopDir } from "@tauri-apps/api/path";
 
+
 function AppLayout() {
   const [visible, setVisible] = useState("none");
-  const [intialPath, setIntialPath] = useState("");
+ 
   const OutletRef = useRef<HTMLDivElement | null>(null);
   const scrollButtonRef = useRef<HTMLButtonElement | null>(null);
 
   const navigate = useNavigate();
   const context = useMyContext();
+
 
   // for setting the initial list as desktop
   useEffect(() => {
@@ -29,7 +31,9 @@ function AppLayout() {
     };
     initPath();
   }, []);
+  
 
+  // to display scroll top button
   function scrollFunction() {
     const List = OutletRef.current;
     const scrollTop = List?.scrollTop || 0;
@@ -70,7 +74,8 @@ function AppLayout() {
       }
     };
   }, []);
-
+ 
+  //set scroll to top each time global state is changed
   useEffect(() => {
     const List = OutletRef.current;
     if (List) {

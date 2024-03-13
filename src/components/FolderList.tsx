@@ -7,17 +7,37 @@ import { useContextMenu } from "./ContextMenu/contextMenuHook";
 import ContextMenu from "./ContextMenu/ContextMenu";
 import { confirm } from "@tauri-apps/api/dialog";
 
+
+
+
 function FolderList() {
+ 
+
+  //to manage the state of the FileDetailModel list comes from the backend 
+  
   const [directoryItem, setDirectoryItem] = useState<FileDetailModel[]>([]);
 
+  //to reRender the list component after context menu operation
   const [reRender, setReRender] = useState(0);
+  
+  //to access global path that currently accessed by explorer
   const context = useMyContext();
+
+  //hook for managing the context menu
   const { isVisible, position, currentPath, showContextMenu, hideContextMenu } =
     useContextMenu();
 
-  const handleTdClick = async (item: string) => {
-    const itemType = await invoke("check_file_extension", { path: item });
+  const [copyPath, setCopyPath] = useState("");
 
+  // function to handle table data click
+  const handleTdClick = async (item: string) => {
+
+    //to check file type 
+    const itemType = await invoke("check_file_extension", { path: item });
+     
+
+    // if it folder then the folder list display item in folder path
+    // if it file the file is opened using default native software
     if (itemType === "Folder") {
       context.setGlobalState(item);
     } else {
@@ -26,6 +46,10 @@ function FolderList() {
     }
   };
 
+
+
+  // the FileComponent invoke the getList every time the globalState and reRender state changes  
+  // the list of the files path inside the globalState is set to the SetDirectory 
   useEffect(() => {
     hideContextMenu();
     const getList = async () => {
@@ -39,8 +63,16 @@ function FolderList() {
     };
     getList();
   }, [context.globalState, reRender]);
+ 
+
+  // handle function for context menu option button clicking
+  // invoke the backend function for the option clicking based on the actionType passed
+  // after ever action the List id reRendered and context menu is hided
 
   const handleContextButtonClick = async (actionType: String) => {
+    
+    hideContextMenu();
+
     if (actionType == "newFolder") {
       if (currentPath?.file_type == "Folder") {
         let name = prompt("Enter new folder name");
@@ -56,7 +88,6 @@ function FolderList() {
         setReRender(reRender + 1);
       }
     } else if (actionType == "delete") {
-      hideContextMenu();
       const confirmation = await confirm("do you want to delete the file?", {
         title: currentPath?.file_name,
         type: "warning",
@@ -73,7 +104,22 @@ function FolderList() {
       if (currentPath) {
         dialog.open({ defaultPath: currentPath.file_name });
       }
+    } else if (actionType === "copy") {
+      if (currentPath) {
+        setCopyPath(currentPath.file_name);
+      }
+      dialog.message("Copied successfully");
+    } else if (actionType === "paste") {
+      if (currentPath && copyPath) {
+        await invoke('copy_file',{source:copyPath,destination:currentPath.file_name}).then(() => {
+          dialog.message("Pasted successfully");
+          setReRender(reRender+1);
+        }).catch((error) => {
+          dialog.message(error);
+        });
+      }
     }
+
     hideContextMenu();
   };
 
@@ -88,7 +134,7 @@ function FolderList() {
         <thead className="table-dark">
           <tr>
             <th scope="col">Name</th>
-            <th scope="col">Date Modified</th>
+            <th scope="col">Date modified</th>
             <th scope="col">Type</th>
             <th scope="col">Size</th>
           </tr>
@@ -116,7 +162,6 @@ function FolderList() {
           ))}
         </tbody>
       </table>
-
       <ContextMenu
         isVisible={isVisible}
         position={position}

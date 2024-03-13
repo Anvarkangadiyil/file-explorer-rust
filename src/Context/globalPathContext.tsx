@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   Dispatch,
   SetStateAction,
+  useState,
 } from "react";
 import { FileDetailModel } from "../model/model";
 
@@ -13,11 +14,15 @@ type MyContextType = {
   setGlobalState: Dispatch<SetStateAction<string>>;
   globalSearchState: FileDetailModel[]; 
   setGlobalSearchState: React.Dispatch<React.SetStateAction<FileDetailModel[]>>;
+  copyPath:string;
+  setCopyPath:Dispatch<SetStateAction<string>>;
 };
 
 
 
 const MyContext = createContext<MyContextType | undefined>(undefined);
+
+
 
 export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -27,6 +32,7 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   const [globalSearchState, setGlobalSearchState] = React.useState<FileDetailModel[]>([
     
   ]);
+  const[copyPath,setCopyPath]=React.useState(" ");
 
   return (
     <MyContext.Provider
@@ -35,6 +41,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
         setGlobalState,
         globalSearchState,
         setGlobalSearchState,
+        copyPath,
+        setCopyPath
       }}
     >
       {children}
@@ -42,6 +50,8 @@ export const MyContextProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
+
+//hook to manage state of the search List 
 export const useMyContext = () => {
   const context = useContext(MyContext);
   if (!context) {

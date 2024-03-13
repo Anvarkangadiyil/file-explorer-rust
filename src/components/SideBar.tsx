@@ -6,6 +6,7 @@ import {
   FaMusic,
   FaVideo,
 } from "react-icons/fa";
+import { LuFolderSync } from "react-icons/lu";
 import { Menu, MenuItem, Sidebar, menuClasses } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import Drive from "./Drive";
@@ -24,7 +25,6 @@ import { invoke } from "@tauri-apps/api";
 import { checkPathContain } from "./functions/Function";
 
 function SideBar() {
-  
   const context = useMyContext();
 
   const [paths, setPaths] = useState({
@@ -36,6 +36,7 @@ function SideBar() {
     videoPath: "",
   });
 
+  // to fetch the path need by the side bar
   useEffect(() => {
     const fetchPaths = async () => {
       try {
@@ -62,14 +63,19 @@ function SideBar() {
     fetchPaths();
   }, []);
 
+  // to manage the Drive state
   const [volumes, setVolumes] = useState<Volume[]>([]);
 
+  //to change the current directory path
   function handlePath(path: string) {
     context.setGlobalState(path);
-    // setSelectedMenuItem(path);
     document.documentElement.scrollTop = 0;
   }
 
+  const [refresh, setReFresh] = useState(0);
+
+  // to get the Dive data like available drives,size, available space, mount area
+  // the drive data is updated each time the globalState changes
   useEffect(() => {
     const getVolume = async () => {
       try {
@@ -81,8 +87,7 @@ function SideBar() {
     };
 
     getVolume();
-  }, [context.globalState]);
-
+  }, [context.globalState, refresh]);
 
   return (
     <Sidebar
@@ -195,7 +200,20 @@ function SideBar() {
         </MenuItem>
       </Menu>
       <hr />
-      <div className="sidebar-heading mt-3 m-3">Drive</div>
+      <div className="d-flex align-items-center ms-1">
+        <div className="sidebar-heading me-5 ">Drive</div>
+        <div className="ms-5">
+          <button
+            className="btn text-warning"
+            onClick={() => {
+              setReFresh(refresh + 1);
+            }}
+          >
+            <LuFolderSync />
+          </button>
+        </div>
+      </div>
+
       {volumes.map((volume) => (
         <Drive
           color={"color"}

@@ -11,6 +11,8 @@ interface DriveDetailProps {
   name: String;
 }
 
+
+//
 function Drive({
   name,
   mountPoint,
@@ -20,6 +22,9 @@ function Drive({
   used_space,
 }: DriveDetailProps) {
   let usedGBper = (used_space / total_space) * 100;
+  
+
+  //based on the used space the color of the progress bar of Drive component changes 
 
   if (usedGBper < 30) {
     color = "info";

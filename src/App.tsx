@@ -15,7 +15,7 @@ import AppLayout from "./layout/AppLayout";
 import { MyContextProvider } from "./context/globalPathContext";
 import FolderList from "./components/FolderList";
 import SearchList from "./components/SearchList";
-import ErrorPage from "./components/ErrorPage";
+
 
 
 
@@ -26,13 +26,13 @@ const router = createBrowserRouter(
     <Route path="/" element={<AppLayout />}>
       <Route path="List" element={<FolderList/>} />
       <Route path="Slist" element={<SearchList/>} />
-      <Route path="error-page" element={<ErrorPage/>}/>
     </Route>
           
     
   
     
   )
+  
 );
 function App() {
 

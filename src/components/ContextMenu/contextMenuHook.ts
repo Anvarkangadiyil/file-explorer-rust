@@ -9,6 +9,8 @@ interface ContextMenuHook {
   hideContextMenu: () => void;
 }
 
+
+//hook to manage the context Menu
 export const useContextMenu = (): ContextMenuHook => {
   const [isVisible, setIsVisible] = useState<string>('none');
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });

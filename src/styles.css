@@ -215,3 +215,25 @@ border-color: gray;
   align-items: center;
   justify-content: center;
 }
+
+.custom-width{
+  width: 80px;
+}
+#selectBox::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Invert the arrow color */
+}
+
+.d-inline{
+display: inline;
+}
+
+.btn{
+  border: "0";
+  padding: "0";
+  backgroundColor: "inherit";
+  
+};
+
+.py-nav{
+
+}
