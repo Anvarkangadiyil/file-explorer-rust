@@ -127,13 +127,18 @@ pub fn open_file(path:String){
 #[tauri::command]
 pub async fn search_function(path:String,search_inp:String)->Vec<FileDetails>{
 
-    
+    use std::time::Instant;
+    let now = Instant::now();
+
 let files: Vec<String> = SearchBuilder::default()
     .location(path)
     .search_input(search_inp)
     .ignore_case()
     .build()
     .collect();
+
+    
+
     let mut file_details_list = Vec::new();
 
     for file in files {
@@ -152,7 +157,14 @@ let files: Vec<String> = SearchBuilder::default()
         file_details_list.push(file_details);
         
     }
-    println!("{:?}",file_details_list);
+    
+    println!("{:#?}",file_details_list);
+
+
+    let elapsed = now.elapsed();
+    println!("Elapsed: {:.2?}", elapsed);
+
+
     file_details_list 
 }
 

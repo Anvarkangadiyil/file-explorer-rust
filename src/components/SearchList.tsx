@@ -16,7 +16,7 @@ function SearchList() {
 
   const [reRender, setReRender] = useState(0);
 
-  const [copyPath, setCopyPath] = useState("");
+  
 
   const { isVisible, position, currentPath, showContextMenu, hideContextMenu } =
     useContextMenu();
@@ -62,12 +62,12 @@ function SearchList() {
         }
       } else if (actionType === "copy") {
         if (currentPath) {
-          setCopyPath(currentPath.file_name);
+          context.setCopyPath(currentPath.file_name);
         }
         dialog.message("Copied successfully");
       } else if (actionType === "paste") {
-        if (currentPath && copyPath) {
-          await invoke('copy_file',{source:copyPath,destination:currentPath.file_name}).then(() => {
+        if (currentPath && context.copyPath) {
+          await invoke('copy_file',{source:context.copyPath,destination:currentPath.file_name}).then(() => {
             dialog.message("Pasted successfully");
             setReRender(reRender+1);
           }).catch((error) => {
