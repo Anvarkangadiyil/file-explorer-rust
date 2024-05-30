@@ -13,9 +13,10 @@ File explorer that helps to search file in blazing speed
 
 ## installation
 ```sh
-git clone
-npm install
-npm run tauri dev
+> git clone https://github.com/Anvarkangadiyil/file-explorer-rust.git
+> cd file-explorer
+> npm install
+> npm run tauri dev
 ```
 ## Screen shots
 ![image 1](https://github.com/Anvarkangadiyil/file-explorer-rust/blob/main/screenshots/Screenshot%202024-05-09%20200255.png)
